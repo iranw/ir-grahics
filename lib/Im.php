@@ -195,7 +195,7 @@ class Im extends Graphics implements GraphicsInterface
             $y = $im->getimageheight() - $waterImg->getimageheight();
         }
 
-        $im->compositeimage($waterImg, Imagick::COMPOSITE_DEFAULT, $x, $y);
+        $im->compositeimage($waterImg, \Imagick::COMPOSITE_DEFAULT, $x, $y);
         $im->enhanceimage();
         $im->writeImage($thumbname);
         $im->clear();
