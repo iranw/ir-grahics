@@ -1,9 +1,12 @@
-图片处理类
+# 图片处理类
 
 Gm/Im/Gd
 
 
-**********************使用文档文档*****************************
+###### 使用文档文档
+
+```php
+<?php
 require './vendor/autoload.php';
 
 //生成验证码
@@ -34,3 +37,4 @@ echo $obj->getImgWater('./water.png', 0, 4);
 //压缩图片
 $obj = new \Ir\Graphics\Gm('./a.png');
 echo $obj->compress(); //enhanceimage
+```
