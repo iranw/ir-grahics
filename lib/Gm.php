@@ -14,7 +14,7 @@ class Gm extends Graphics implements GraphicsInterface
      */
     public function getCaptcha($code, $width, $height, $mode = 0)
     {
-        $draw = new GmagickDraw();
+        $draw = new \GmagickDraw();
         $draw->setfillcolor($this->fontcolor);
         if (!is_null($this->fontstyle)) {
             $draw->setFont($this->fontstyle);
@@ -41,7 +41,7 @@ class Gm extends Graphics implements GraphicsInterface
         // $draw->line(5,5,0,0);
         // $draw->point(10,10);
 
-        $gm = new Gmagick();
+        $gm = new \Gmagick();
         $gm->newimage($width, $height, "gray", 'png');
         $gm->drawimage($draw);
 
@@ -62,7 +62,7 @@ class Gm extends Graphics implements GraphicsInterface
         if (!is_string($thumbname)) {
             $thumbname = parent::getThumbName($this->sourceimg, parent::GZIP_PRIFIX, $thumbname);
         }
-        $gm = new Gmagick($this->sourceimg);
+        $gm = new \Gmagick($this->sourceimg);
         $gm->enhanceimage();
         $gm->write($thumbname);
         $gm->clear();
@@ -83,7 +83,7 @@ class Gm extends Graphics implements GraphicsInterface
         if (!is_string($thumbname)) {
             $thumbname = parent::getThumbName($this->sourceimg, parent::THUMB_PRXFIX, $thumbname);
         }
-        $gm = new Gmagick($this->sourceimg);
+        $gm = new \Gmagick($this->sourceimg);
         $gm->thumbnailimage($width, $height, $mode);
         $gm->write($thumbname);
         $gm->clear();
@@ -104,7 +104,7 @@ class Gm extends Graphics implements GraphicsInterface
         if (!is_string($thumbname)) {
             $thumbname = parent::getThumbName($this->sourceimg, parent::CROP_PRIFIX, $thumbname);
         }
-        $gm = new Gmagick($this->sourceimg);
+        $gm = new \Gmagick($this->sourceimg);
         if ($mode == 0) {
             $x = ($gm->getimagewidth() - $w) / 2;
             $y = ($gm->getimageheight() - $h) / 2;
@@ -143,17 +143,17 @@ class Gm extends Graphics implements GraphicsInterface
             $thumbname = parent::getThumbName($this->sourceimg, parent::CROP_PRIFIX, $thumbname);
         }
 
-        $draw = new GmagickDraw();
+        $draw = new \GmagickDraw();
         if ($mode == 0) {
-            $draw->setgravity(Gmagick::GRAVITY_CENTER); //中间
+            $draw->setgravity(\Gmagick::GRAVITY_CENTER); //中间
         } else if ($mode == 1) {
-            $draw->setgravity(Gmagick::GRAVITY_NORTHWEST); //左上
+            $draw->setgravity(\Gmagick::GRAVITY_NORTHWEST); //左上
         } else if ($mode == 2) {
-            $draw->setgravity(Gmagick::GRAVITY_NORTHEAST); //右上
+            $draw->setgravity(\Gmagick::GRAVITY_NORTHEAST); //右上
         } else if ($mode == 3) {
-            $draw->setgravity(Gmagick::GRAVITY_SOUTHEAST); //右下
+            $draw->setgravity(\Gmagick::GRAVITY_SOUTHEAST); //右下
         } else if ($mode == 4) {
-            $draw->setgravity(Gmagick::GRAVITY_SOUTHWEST); //左下
+            $draw->setgravity(\Gmagick::GRAVITY_SOUTHWEST); //左下
         }
 
         $draw->setfillcolor($this->fontcolor);
@@ -161,7 +161,7 @@ class Gm extends Graphics implements GraphicsInterface
             $draw->setFont($this->fontstyle);
         }
         $draw->setfontsize($this->fontsize);
-        $gm = new Gmagick($this->sourceimg);
+        $gm = new \Gmagick($this->sourceimg);
         $gm->annotateimage($draw, 10, 15, 1, $text);
         $gm->enhanceimage();
         $gm->write($thumbname);
@@ -182,8 +182,8 @@ class Gm extends Graphics implements GraphicsInterface
         if (!is_string($thumbname)) {
             $thumbname = parent::getThumbName($this->sourceimg, parent::CROP_PRIFIX, $thumbname);
         }
-        $waterImg = new Gmagick($logoimg);
-        $gm       = new Gmagick($this->sourceimg);
+        $waterImg = new \Gmagick($logoimg);
+        $gm       = new \Gmagick($this->sourceimg);
 
         if ($mode == 0) {
             $x = ($gm->getimagewidth() - $waterImg->getimagewidth()) / 2;
