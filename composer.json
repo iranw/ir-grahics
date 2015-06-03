@@ -1,0 +1,16 @@
+{
+    "name": "ir/graphics",
+    "type": "library",
+    "description": "Image Manipulation Class. order by phpno.com",
+    "keywords": ["gm", "im","gd","graphicsmagick","ImageMagick"],
+    "homepage": "http://www.phpno.com",
+    "license": "MIT",
+    "authors": [
+        {"name": "Iranw", "email": "wang_wenguan@yeah.net"}
+    ],
+    "autoload": {
+        "psr-4": { 
+            "Ir\\Graphics\\": "lib/"
+        }
+    }
+}
