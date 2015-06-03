@@ -13,7 +13,7 @@ abstract class Graphics
     public $fontstyle = null;
     public $sourceimg;
 
-    public function __construct($sourceimg = '')
+    protected function __construct($sourceimg = '')
     {
         $this->sourceimg = $sourceimg;
     }

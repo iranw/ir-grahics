@@ -1,12 +1,13 @@
 <?php
 namespace Ir\Graphics;
 
-class Gm extends Graphics implements GraphicsInterface
+class Im extends Graphics implements GraphicsInterface
 {
+
     public function __construct($sourceimg = '')
     {
-        if (!extension_loaded('gmagick')) {
-            die('gmagick extension is not loaded');
+        if (!extension_loaded('imagick')) {
+            die('imagick extension is not loaded');
         }
         parent::__construct($sourceimg);
     }
@@ -21,41 +22,26 @@ class Gm extends Graphics implements GraphicsInterface
      */
     public function getCaptcha($code, $width, $height, $mode = 0)
     {
-        $draw = new \GmagickDraw();
-        $draw->setfillcolor($this->fontcolor);
+
+        $draw = new \ImagickDraw();
+        $draw->setFillColor($this->fontcolor);
         if (!is_null($this->fontstyle)) {
             $draw->setFont($this->fontstyle);
         }
-        $draw->setfontsize($this->fontsize);
-        $draw->annotate(5, 15, $code);
+        $draw->setFontSize($this->fontsize);
+        $draw->annotation(5, 15, $code);
 
-        if ($mode == 1) {
-            $xArr = range(1, $width);
-            shuffle($xArr);
-            $yArr = range(1, $height);
-            shuffle($yArr);
-
-            for ($i = 0; $i < 20; $i++) {
-                $draw->point($xArr[$i], $yArr[$i]);
-            }
-
-            shuffle($xArr);
-            shuffle($yArr);
-            for ($i = 0; $i < 5; $i++) {
-                $draw->line($xArr[$i], $xArr[$i], $xArr[$i + 5], $yArr[$i + 5]);
-            }
-        }
         // $draw->line(5,5,0,0);
         // $draw->point(10,10);
 
-        $gm = new \Gmagick();
-        $gm->newimage($width, $height, "gray", 'png');
-        $gm->drawimage($draw);
+        $im = new \Imagick();
+        $im->newImage($width, $height, "gray", 'png');
+        $im->drawImage($draw);
 
         header('Content-type: image/png');
-        echo $gm;
-        $gm->clear();
-        $gm->destroy();
+        echo $im;
+        $im->clear();
+        $im->destroy();
     }
 
     /**
@@ -69,11 +55,11 @@ class Gm extends Graphics implements GraphicsInterface
         if (!is_string($thumbname)) {
             $thumbname = parent::getThumbName($this->sourceimg, parent::GZIP_PRIFIX, $thumbname);
         }
-        $gm = new \Gmagick($this->sourceimg);
-        $gm->enhanceimage();
-        $gm->write($thumbname);
-        $gm->clear();
-        $gm->destroy();
+        $im = new \Imagick($this->sourceimg);
+        $im->enhanceImage();
+        $im->writeImage($thumbname);
+        $im->clear();
+        $im->destroy();
         return $thumbname;
     }
 
@@ -90,11 +76,11 @@ class Gm extends Graphics implements GraphicsInterface
         if (!is_string($thumbname)) {
             $thumbname = parent::getThumbName($this->sourceimg, parent::THUMB_PRXFIX, $thumbname);
         }
-        $gm = new \Gmagick($this->sourceimg);
-        $gm->thumbnailimage($width, $height, $mode);
-        $gm->write($thumbname);
-        $gm->clear();
-        $gm->destroy();
+        $im = new \Imagick($this->sourceimg);
+        $im->thumbnailImage($width, $height, $mode);
+        $im->writeImage($thumbname);
+        $im->clear();
+        $im->destroy();
         return $thumbname;
     }
 
@@ -111,29 +97,29 @@ class Gm extends Graphics implements GraphicsInterface
         if (!is_string($thumbname)) {
             $thumbname = parent::getThumbName($this->sourceimg, parent::CROP_PRIFIX, $thumbname);
         }
-        $gm = new \Gmagick($this->sourceimg);
+        $im = new \Imagick($this->sourceimg);
         if ($mode == 0) {
-            $x = ($gm->getimagewidth() - $w) / 2;
-            $y = ($gm->getimageheight() - $h) / 2;
+            $x = ($im->getimagewidth() - $w) / 2;
+            $y = ($im->getimageheight() - $h) / 2;
         } else if ($mode == 1) {
             $x = 0;
             $y = 0;
         } else if ($mode == 2) {
-            $x = $gm->getimagewidth() - $w;
+            $x = $im->getimagewidth() - $w;
             $y = 0;
         } else if ($mode == 3) {
-            $x = $gm->getimagewidth() - $w;
-            $y = $gm->getimageheight() - $h;
+            $x = $im->getimagewidth() - $w;
+            $y = $im->getimageheight() - $h;
         } else if ($mode == 4) {
             $x = 0;
-            $y = $gm->getimageheight() - $h;
+            $y = $im->getimageheight() - $h;
         }
 
-        $gm->cropimage($w, $h, $x, $y);
-        $gm->enhanceimage();
-        $gm->write($thumbname);
-        $gm->clear();
-        $gm->destroy();
+        $im->cropImage($w, $h, $x, $y);
+        $im->enhanceImage();
+        $im->writeImage($thumbname);
+        $im->clear();
+        $im->destroy();
         return $thumbname;
     }
 
@@ -147,33 +133,33 @@ class Gm extends Graphics implements GraphicsInterface
     public function getStrWater($text, $thumbname = 2, $mode = 0)
     {
         if (!is_string($thumbname)) {
-            $thumbname = parent::getThumbName($this->sourceimg, parent::CROP_PRIFIX, $thumbname);
+            $thumbname = parent::getThumbName($this->sourceimg, parent::WATER_PRIFIX, $thumbname);
         }
 
-        $draw = new \GmagickDraw();
+        $draw = new \ImagickDraw();
         if ($mode == 0) {
-            $draw->setgravity(\Gmagick::GRAVITY_CENTER); //中间
+            $draw->setGravity(\Imagick::GRAVITY_CENTER); //中间
         } else if ($mode == 1) {
-            $draw->setgravity(\Gmagick::GRAVITY_NORTHWEST); //左上
+            $draw->setGravity(\Imagick::GRAVITY_NORTHWEST); //左上
         } else if ($mode == 2) {
-            $draw->setgravity(\Gmagick::GRAVITY_NORTHEAST); //右上
+            $draw->setGravity(\Imagick::GRAVITY_NORTHEAST); //右上
         } else if ($mode == 3) {
-            $draw->setgravity(\Gmagick::GRAVITY_SOUTHEAST); //右下
+            $draw->setGravity(\Imagick::GRAVITY_SOUTHEAST); //右下
         } else if ($mode == 4) {
-            $draw->setgravity(\Gmagick::GRAVITY_SOUTHWEST); //左下
+            $draw->setGravity(\Imagick::GRAVITY_SOUTHWEST); //左下
         }
 
-        $draw->setfillcolor($this->fontcolor);
+        $draw->setFillColor($this->fontcolor);
         if (!is_null($this->fontstyle)) {
             $draw->setFont($this->fontstyle);
         }
-        $draw->setfontsize($this->fontsize);
-        $gm = new \Gmagick($this->sourceimg);
-        $gm->annotateimage($draw, 10, 15, 1, $text);
-        $gm->enhanceimage();
-        $gm->write($thumbname);
-        $gm->clear();
-        $gm->destroy();
+        $draw->setFontSize($this->fontsize);
+        $im = new \Imagick($this->sourceimg);
+        $im->annotateimage($draw, 5, 5, 0, $text);
+        $im->enhanceImage();
+        $im->writeImage($thumbname);
+        $im->clear();
+        $im->destroy();
         return $thumbname;
     }
 
@@ -187,37 +173,35 @@ class Gm extends Graphics implements GraphicsInterface
     public function getImgWater($logoimg, $thumbname = 2, $mode = 0)
     {
         if (!is_string($thumbname)) {
-            $thumbname = parent::getThumbName($this->sourceimg, parent::CROP_PRIFIX, $thumbname);
+            $thumbname = parent::getThumbName($this->sourceimg, parent::WATER_PRIFIX, $thumbname);
         }
-        $waterImg = new \Gmagick($logoimg);
-        $gm       = new \Gmagick($this->sourceimg);
+        $waterImg = new \Imagick($logoimg);
+        $im       = new \Imagick($this->sourceimg);
 
         if ($mode == 0) {
-            $x = ($gm->getimagewidth() - $waterImg->getimagewidth()) / 2;
-            $y = ($gm->getimageheight() - $waterImg->getimageheight()) / 2;
+            $x = ($im->getimagewidth() - $waterImg->getimagewidth()) / 2;
+            $y = ($im->getimageheight() - $waterImg->getimageheight()) / 2;
         } else if ($mode == 1) {
             $x = 0;
             $y = 0;
         } else if ($mode == 2) {
-            $x = $gm->getimagewidth() - $waterImg->getimagewidth();
+            $x = $im->getimagewidth() - $waterImg->getimagewidth();
             $y = 0;
         } else if ($mode == 3) {
-            $x = $gm->getimagewidth() - $waterImg->getimagewidth();
-            $y = $gm->getimageheight() - $waterImg->getimageheight();
+            $x = $im->getimagewidth() - $waterImg->getimagewidth();
+            $y = $im->getimageheight() - $waterImg->getimageheight();
         } else if ($mode == 4) {
             $x = 0;
-            $y = $gm->getimageheight() - $waterImg->getimageheight();
+            $y = $im->getimageheight() - $waterImg->getimageheight();
         }
 
-        $gm->scaleimage($gm->getimagewidth(), $gm->getimageheight());
-        $gm->compositeimage($waterImg, 2, $x, $y);
-        $gm->enhanceimage();
-        $gm->write($thumbname);
-        $gm->clear();
-        $gm->destroy();
+        $im->compositeimage($waterImg, Imagick::COMPOSITE_DEFAULT, $x, $y);
+        $im->enhanceimage();
+        $im->writeImage($thumbname);
+        $im->clear();
+        $im->destroy();
         $waterImg->clear();
         $waterImg->destroy();
         return $thumbname;
     }
-
 }
