@@ -1,7 +1,8 @@
 <?php
-namespace Xz\Lib\Image;
+namespace Ir\Graphics;
 
-class Gm extends Graphics implements GraphicsInterface{
+class Gm extends Graphics implements GraphicsInterface
+{
 
     /**
      * 生成验证码
@@ -11,36 +12,37 @@ class Gm extends Graphics implements GraphicsInterface{
      * @param  integer $mode   验证码类型  0:一般 1:复杂
      * @return string          图像字符串
      */
-    public function getCaptcha($code,$width,$height,$mode=0){
+    public function getCaptcha($code, $width, $height, $mode = 0)
+    {
         $draw = new GmagickDraw();
         $draw->setfillcolor($this->fontcolor);
-        if(!is_null($this->fontstyle)){
+        if (!is_null($this->fontstyle)) {
             $draw->setFont($this->fontstyle);
         }
         $draw->setfontsize($this->fontsize);
-        $draw->annotate(5,15,$code); 
+        $draw->annotate(5, 15, $code);
 
-        if($mode==1){
-            $xArr = range(1,$width);
+        if ($mode == 1) {
+            $xArr = range(1, $width);
             shuffle($xArr);
-            $yArr = range(1,$height);
+            $yArr = range(1, $height);
             shuffle($yArr);
 
-            for($i=0;$i<20;$i++){
-                $draw->point($xArr[$i],$yArr[$i]);
+            for ($i = 0; $i < 20; $i++) {
+                $draw->point($xArr[$i], $yArr[$i]);
             }
 
             shuffle($xArr);
             shuffle($yArr);
-            for($i=0;$i<5;$i++){
-                $draw->line($xArr[$i],$xArr[$i],$xArr[$i+5],$yArr[$i+5]);
+            for ($i = 0; $i < 5; $i++) {
+                $draw->line($xArr[$i], $xArr[$i], $xArr[$i + 5], $yArr[$i + 5]);
             }
         }
         // $draw->line(5,5,0,0);
         // $draw->point(10,10);
 
         $gm = new Gmagick();
-        $gm->newimage($width, $height, "gray",'png');
+        $gm->newimage($width, $height, "gray", 'png');
         $gm->drawimage($draw);
 
         header('Content-type: image/png');
@@ -55,9 +57,10 @@ class Gm extends Graphics implements GraphicsInterface{
      * @param  [type] $targetImage [description]
      * @return [type]              [description]
      */
-    public function compress($thumbname=2){
-        if(!is_string($thumbname)){
-            $thumbname = parent::getThumbName($this->sourceimg,parent::GZIP_PRIFIX,$thumbname);
+    public function compress($thumbname = 2)
+    {
+        if (!is_string($thumbname)) {
+            $thumbname = parent::getThumbName($this->sourceimg, parent::GZIP_PRIFIX, $thumbname);
         }
         $gm = new Gmagick($this->sourceimg);
         $gm->enhanceimage();
@@ -75,12 +78,13 @@ class Gm extends Graphics implements GraphicsInterface{
      * @param  integer $mode       是否等比例生成缩略图
      * @return [string]  $thumb_name    返回缩略图的名称
      */
-    public function getThumbnail($width,$height,$thumbname=0,$mode=true){
-        if(!is_string($thumbname)){
-            $thumbname = parent::getThumbName($this->sourceimg,parent::THUMB_PRXFIX,$thumbname);
+    public function getThumbnail($width, $height, $thumbname = 0, $mode = true)
+    {
+        if (!is_string($thumbname)) {
+            $thumbname = parent::getThumbName($this->sourceimg, parent::THUMB_PRXFIX, $thumbname);
         }
         $gm = new Gmagick($this->sourceimg);
-        $gm->thumbnailimage($width,$height,$mode);
+        $gm->thumbnailimage($width, $height, $mode);
         $gm->write($thumbname);
         $gm->clear();
         $gm->destroy();
@@ -95,29 +99,30 @@ class Gm extends Graphics implements GraphicsInterface{
      * @param  integer $mode       截图模式0:正中间 1:坐上 2:右上 3:右下 4:左下
      * @return [string]              返回截图名称
      */
-    public function getCropImage($w,$h,$thumbname=0,$mode=0){
-        if(!is_string($thumbname)){
-            $thumbname = parent::getThumbName($this->sourceimg,parent::CROP_PRIFIX,$thumbname);
+    public function getCropImage($w, $h, $thumbname = 0, $mode = 0)
+    {
+        if (!is_string($thumbname)) {
+            $thumbname = parent::getThumbName($this->sourceimg, parent::CROP_PRIFIX, $thumbname);
         }
         $gm = new Gmagick($this->sourceimg);
-        if($mode==0){
-            $x = ($gm->getimagewidth()-$w)/2;
-            $y = ($gm->getimageheight()-$h)/2;
-        }else if($mode==1){
+        if ($mode == 0) {
+            $x = ($gm->getimagewidth() - $w) / 2;
+            $y = ($gm->getimageheight() - $h) / 2;
+        } else if ($mode == 1) {
             $x = 0;
             $y = 0;
-        }else if($mode==2){
-            $x = $gm->getimagewidth()-$w;
+        } else if ($mode == 2) {
+            $x = $gm->getimagewidth() - $w;
             $y = 0;
-        }else if($mode==3){
-            $x = $gm->getimagewidth()-$w;
-            $y = $gm->getimageheight()-$h;
-        }else if($mode==4){
+        } else if ($mode == 3) {
+            $x = $gm->getimagewidth() - $w;
+            $y = $gm->getimageheight() - $h;
+        } else if ($mode == 4) {
             $x = 0;
-            $y = $gm->getimageheight()-$h;
-        }        
+            $y = $gm->getimageheight() - $h;
+        }
 
-        $gm->cropimage($w,$h,$x,$y);
+        $gm->cropimage($w, $h, $x, $y);
         $gm->enhanceimage();
         $gm->write($thumbname);
         $gm->clear();
@@ -132,31 +137,32 @@ class Gm extends Graphics implements GraphicsInterface{
      * @param  [type] $mode       文字存放位置 0:正中间 1:坐上 2:右上 3:右下 4:左下
      * @return [type]             [description]
      */
-    public function getStrWater($text,$thumbname=2,$mode=0){
-        if(!is_string($thumbname)){
-            $thumbname = parent::getThumbName($this->sourceimg,parent::CROP_PRIFIX,$thumbname);
+    public function getStrWater($text, $thumbname = 2, $mode = 0)
+    {
+        if (!is_string($thumbname)) {
+            $thumbname = parent::getThumbName($this->sourceimg, parent::CROP_PRIFIX, $thumbname);
         }
 
         $draw = new GmagickDraw();
-        if($mode==0){
-            $draw->setgravity(Gmagick::GRAVITY_CENTER );//中间
-        }else if($mode==1){
-            $draw->setgravity(Gmagick::GRAVITY_NORTHWEST );//左上
-        }else if($mode==2){
-            $draw->setgravity(Gmagick::GRAVITY_NORTHEAST);//右上
-        }else if($mode==3){
-            $draw->setgravity(Gmagick::GRAVITY_SOUTHEAST);//右下
-        }else if($mode==4){
-            $draw->setgravity(Gmagick::GRAVITY_SOUTHWEST );//左下
+        if ($mode == 0) {
+            $draw->setgravity(Gmagick::GRAVITY_CENTER); //中间
+        } else if ($mode == 1) {
+            $draw->setgravity(Gmagick::GRAVITY_NORTHWEST); //左上
+        } else if ($mode == 2) {
+            $draw->setgravity(Gmagick::GRAVITY_NORTHEAST); //右上
+        } else if ($mode == 3) {
+            $draw->setgravity(Gmagick::GRAVITY_SOUTHEAST); //右下
+        } else if ($mode == 4) {
+            $draw->setgravity(Gmagick::GRAVITY_SOUTHWEST); //左下
         }
 
         $draw->setfillcolor($this->fontcolor);
-        if(!is_null($this->fontstyle)){
+        if (!is_null($this->fontstyle)) {
             $draw->setFont($this->fontstyle);
         }
         $draw->setfontsize($this->fontsize);
         $gm = new Gmagick($this->sourceimg);
-        $gm->annotateimage($draw , 10, 15 , 1 , $text );
+        $gm->annotateimage($draw, 10, 15, 1, $text);
         $gm->enhanceimage();
         $gm->write($thumbname);
         $gm->clear();
@@ -164,41 +170,39 @@ class Gm extends Graphics implements GraphicsInterface{
         return $thumbname;
     }
 
-    
-
     /**
      * 添加图片水印
      * @param  string $logoimg      水印图片地址dir
-     * @param  string $thumbname    生成的水印图片名字 
+     * @param  string $thumbname    生成的水印图片名字
      * @param  [type] $mode         水印存放位置 0:正中间 1:坐上 2:右上 3:右下 4:左下
      * @return [string] $thumbname  返回加了水印后的图片地址
      */
-    public function getImgWater($logoimg,$thumbname=2,$mode=0){
-        if(!is_string($thumbname)){
-            $thumbname = parent::getThumbName($this->sourceimg,parent::CROP_PRIFIX,$thumbname);
+    public function getImgWater($logoimg, $thumbname = 2, $mode = 0)
+    {
+        if (!is_string($thumbname)) {
+            $thumbname = parent::getThumbName($this->sourceimg, parent::CROP_PRIFIX, $thumbname);
         }
         $waterImg = new Gmagick($logoimg);
-        $gm = new Gmagick($this->sourceimg);
+        $gm       = new Gmagick($this->sourceimg);
 
-
-        if($mode==0){
-            $x = ($gm->getimagewidth()-$waterImg->getimagewidth())/2;
-            $y = ($gm->getimageheight()-$waterImg->getimageheight())/2;
-        }else if($mode==1){
+        if ($mode == 0) {
+            $x = ($gm->getimagewidth() - $waterImg->getimagewidth()) / 2;
+            $y = ($gm->getimageheight() - $waterImg->getimageheight()) / 2;
+        } else if ($mode == 1) {
             $x = 0;
             $y = 0;
-        }else if($mode==2){
-            $x = $gm->getimagewidth()-$waterImg->getimagewidth();
+        } else if ($mode == 2) {
+            $x = $gm->getimagewidth() - $waterImg->getimagewidth();
             $y = 0;
-        }else if($mode==3){
-            $x = $gm->getimagewidth()-$waterImg->getimagewidth();
-            $y = $gm->getimageheight()-$waterImg->getimageheight();
-        }else if($mode==4){
+        } else if ($mode == 3) {
+            $x = $gm->getimagewidth() - $waterImg->getimagewidth();
+            $y = $gm->getimageheight() - $waterImg->getimageheight();
+        } else if ($mode == 4) {
             $x = 0;
-            $y = $gm->getimageheight()-$waterImg->getimageheight();
+            $y = $gm->getimageheight() - $waterImg->getimageheight();
         }
 
-        $gm->scaleimage($gm->getimagewidth(),$gm->getimageheight());
+        $gm->scaleimage($gm->getimagewidth(), $gm->getimageheight());
         $gm->compositeimage($waterImg, 2, $x, $y);
         $gm->enhanceimage();
         $gm->write($thumbname);

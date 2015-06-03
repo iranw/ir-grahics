@@ -1,7 +1,8 @@
 <?php
-namespace Xz\Lib\Image;
+namespace Ir\Graphics;
 
-interface GraphicsInterface {
+interface GraphicsInterface
+{
 
     /**
      * 设置图片
@@ -17,14 +18,14 @@ interface GraphicsInterface {
      * @param  [type] $mode   [description]
      * @return [type]         [description]
      */
-    public function getCaptcha($code,$width,$height,$mode);
+    public function getCaptcha($code, $width, $height, $mode);
 
     /**
      * 压缩图片
      * @param  integer $thumbname 生成后的压缩图片
      * @return [type]             [description]
      */
-    public function compress($thumbname=0);
+    public function compress($thumbname = 0);
 
     /**
      * 生成缩略图
@@ -34,7 +35,7 @@ interface GraphicsInterface {
      * @param  [type] $mode       生成缩略图模型 true:等比例 false:非等比例
      * @return [string]           返回生成缩略图的名字
      */
-    public function getThumbnail($width,$height,$thumbname=0,$mode=true);
+    public function getThumbnail($width, $height, $thumbname = 0, $mode = true);
 
     /**
      * 添加字符串水印
@@ -43,7 +44,7 @@ interface GraphicsInterface {
      * @param  [type] $mode       [description]
      * @return [type]             [description]
      */
-    public function getStrWater($text,$thumbname=2,$mode=0);
+    public function getStrWater($text, $thumbname = 2, $mode = 0);
 
     /**
      * 添加图片水印
@@ -52,7 +53,7 @@ interface GraphicsInterface {
      * @param  [type] $mode       [description]
      * @return [type]             [description]
      */
-    public function getImgWater($logoimg,$thumbname=2,$mode=0);
+    public function getImgWater($logoimg, $thumbname = 2, $mode = 0);
 
     /**
      * 截取图片
@@ -62,6 +63,6 @@ interface GraphicsInterface {
      * @param  [type] $h 截取图片高度
      * @return [type]    [description]
      */
-    public function getCropImage($x,$y,$w,$h);
+    public function getCropImage($x, $y, $w, $h);
 
 }
