@@ -7,6 +7,7 @@ abstract class Graphics
     const THUMB_PRXFIX = "s_";
     const CROP_PRIFIX  = "c_";
     const GZIP_PRIFIX  = "g_";
+    const WATER_PRIFIX = "w_";
 
     public $fontsize  = 16;
     public $fontcolor = '#eee';
